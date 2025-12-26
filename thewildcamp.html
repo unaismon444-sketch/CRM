@@ -1,0 +1,96 @@
+	<!DOCTYPE html>
+<html>
+<head>
+  <title>The Wild Camp Coorg</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial; margin: 20px; background: #f4f6f8; }
+    h2 { color: #1f3d2b; }
+    input, select, button { width: 100%; padding: 8px; margin: 5px 0; }
+    .box { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+
+<h2>🌿 The Wild Camp Coorg – Management</h2>
+
+<div class="box">
+<h3>Attendance</h3>
+<input id="a_name" placeholder="Staff Name">
+<select id="a_status">
+  <option>Present</option>
+  <option>Absent</option>
+</select>
+<button onclick="saveAttendance()">Save Attendance</button>
+</div>
+
+<div class="box">
+<h3>Lead Entry</h3>
+<input id="l_name" placeholder="Guest Name">
+<input id="l_phone" placeholder="Phone">
+<button onclick="saveLead()">Save Lead</button>
+</div>
+
+<div class="box">
+<h3>Income / Expense</h3>
+<select id="f_type">
+  <option>Income</option>
+  <option>Expense</option>
+</select>
+<input id="f_amount" placeholder="Amount">
+<button onclick="saveFinance()">Save</button>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwblcO4-NOiN01_ePwCZfJbTm6Xv-aSm5fzHqQADCBZWdGbLq__utMkHsdgh9nUMrmr/exec";
+
+function saveAttendance() {
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      module: "attendance",
+      date: new Date().toISOString().slice(0,10),
+      staff_id: "WC001",
+      staff_name: document.getElementById("a_name").value,
+      status: document.getElementById("a_status").value,
+      remarks: ""
+    })
+  });
+  alert("Attendance saved");
+}
+
+function saveLead() {
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      module: "lead",
+      lead_id: "L" + Date.now(),
+      guest_name: document.getElementById("l_name").value,
+      phone: document.getElementById("l_phone").value,
+      enquiry_date: new Date().toISOString().slice(0,10),
+      followup_date: "",
+      status: "New",
+      notes: ""
+    })
+  });
+  alert("Lead saved");
+}
+
+function saveFinance() {
+  fetch(WEB_APP_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      module: "finance",
+      date: new Date().toISOString().slice(0,10),
+      type: document.getElementById("f_type").value,
+      category: "General",
+      description: "",
+      amount: document.getElementById("f_amount").value
+    })
+  });
+  alert("Saved");
+}
+</script>
+
+</body>
+</html>
